@@ -3787,8 +3787,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eee3e326443eb4180ccee0658949bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frequency: 2
-  magnitude: 5
+  frequency: 5
+  magnitude: 20
   heightChange: 2
   shapes:
   - {fileID: 1074513447}
