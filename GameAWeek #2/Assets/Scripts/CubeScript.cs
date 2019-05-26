@@ -31,7 +31,7 @@ public class CubeScript : MonoBehaviour
         {
             isLanded = true;
         }
-
+               
         //Check Active Cube
         if (gameObject.transform.parent == null)
         {

@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [HideInInspector]
     public static GameManager instance;
 
-    private int score = 0;
+    public int score = 0;
     private bool outOfBounds = false;
+
+    public bool GAMEISOVER = false;
 
     #region Singleton
 
@@ -36,11 +39,20 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
+
+        if (GAMEISOVER)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                Debug.Log("Reloading");
+            }
+        }
     }
 
     void GameOver()
     {
-        //TODO:
+        GAMEISOVER = true;
         Debug.Log("You Dead");
     }
 

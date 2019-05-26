@@ -6,6 +6,8 @@ public class ClawScript : MonoBehaviour
 {
     private Camera cam;
 
+    private Vector3 startPos;
+
     public float frequency;
     public float magnitude;
     public float heightChange;
@@ -36,32 +38,40 @@ public class ClawScript : MonoBehaviour
 
     private void Start()
     {
+        startPos = transform.position;
+
         cam = Camera.main;
 
         previousCube = firstCube;
 
         NewShape();
+
     }
 
     //Oscillation
     private void FixedUpdate()
     {
-        Oscillate();
+        if (!GameManager.instance.GAMEISOVER)
+            Oscillate();
+        else
+            transform.position = startPos;
     }
 
     private void Update()
     {
-        if (activeCube == null)
+        if (!GameManager.instance.GAMEISOVER)
         {
-            NewShape();
-        }
+            if (activeCube == null)
+            {
+                NewShape();
+            }
 
-        Release();
+            Release();
 
-        if (IsLanded())
-        {
-            
-            onCubeLanded();
+            if (IsLanded())
+            {
+                onCubeLanded();
+            }
         }
     }
 
@@ -124,8 +134,11 @@ public class ClawScript : MonoBehaviour
         if (distance < checkDistance)
         {
             GameManager.instance.ChangeScore(score);
-            float desiredPosition = previousCube.transform.position.x + positionOffset  * Mathf.Sign(previousCube.transform.position.x - activeCube.transform.position.x);
-            activeCube.transform.position = new Vector3(desiredPosition, activeCube.transform.position.y, activeCube.transform.position.z);
+            if(checkDistance < 1)
+            {
+                float desiredPosition = previousCube.transform.position.x;// + positionOffset  * Mathf.Sign(previousCube.transform.position.x - activeCube.transform.position.x);
+                activeCube.transform.position = new Vector3(desiredPosition, activeCube.transform.position.y + 0.1f, activeCube.transform.position.z);
+            }
             return true;
         }
         else return false;
@@ -136,9 +149,15 @@ public class ClawScript : MonoBehaviour
         return activeCube.GetComponent<CubeScript>().isLanded;            
     }
 
+    private float timeKeeper = 0f;
+    private Vector3 horizontalFull = Vector3.zero;
     void Oscillate()
     {
-        Vector3 horizontal = new Vector3(Mathf.Cos(Time.time * frequency) * Time.deltaTime * magnitude, 0, 0);
-        transform.position += horizontal;
+        if (GameManager.instance.GAMEISOVER)
+            timeKeeper = 0; horizontalFull = Vector3.zero;
+
+        timeKeeper += Time.deltaTime;
+        horizontalFull += new Vector3(Mathf.Cos(timeKeeper * frequency) * Time.deltaTime * magnitude, 0, 0);
+        transform.position = horizontalFull + new Vector3(startPos.x, transform.position.y, transform.position.z);
     }
 }
