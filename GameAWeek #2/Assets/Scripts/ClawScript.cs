@@ -44,7 +44,7 @@ public class ClawScript : MonoBehaviour
 
         previousCube = firstCube;
 
-        NewShape();
+        //NewShape();
 
     }
 
@@ -53,8 +53,8 @@ public class ClawScript : MonoBehaviour
     {
         if (!GameManager.instance.GAMEISOVER)
             Oscillate();
-        else
-            transform.position = startPos;
+        //else
+            //transform.position = startPos;
     }
 
     private void Update()
